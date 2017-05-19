@@ -1,11 +1,16 @@
-require('bable-core/register')({
+require("babel-register")({
     presets: ['stage-3']
 });
 
 const model = require('./model.js');
 
-model.sync();
-console.log('db init ok.');
+model.sync().then(()=>{
+    console.log('sync done');
+    process.exit(0);
+}).catch((e)=>{
+    console.log(`failed with ${e}`);
+    process.exit(0);
+});
 
-process.exit(0);
+
 

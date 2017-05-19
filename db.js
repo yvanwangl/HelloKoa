@@ -23,7 +23,7 @@ function defineModel(name, attributes) {
     for(let key in attributes){
         let value = attributes[key];
         if(typeof value=='object' && value['type']){
-            attrs[key] = {...value, allowNull: value.allowNull || false};
+            attrs[key] = Object.assign({},value, {allowNull:value.allowNull || false});
         }else {
             attrs[key] = {type: value, allowNull: false};
         }
@@ -47,7 +47,7 @@ function defineModel(name, attributes) {
         }
     };
 
-    return sequelize.define(name, {...attrs, ...commonAttrs}, {
+    return sequelize.define(name, Object.assign({}, attrs, commonAttrs), {
         tableName: name,
         timestamps: false,
         hooks: {
@@ -77,7 +77,7 @@ let db = {
     defineModel,
     sync(){
         if(process.env.NODE_ENV !== 'production'){
-            sequelize.sync({force: true});
+            return sequelize.sync({force: true});
         }else {
             throw new Error('Cannot sync() when NODE_ENV is set to \'production\'.');
         }

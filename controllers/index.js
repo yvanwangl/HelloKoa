@@ -1,3 +1,6 @@
+const model = require('../model');
+let User = model.User;
+
 //请求根路径的处理函数
 const fn_index = async (ctx, next)=>{
     ctx.render('index.html', {
@@ -22,10 +25,16 @@ const fn_signin = async (ctx, next)=>{
           email = requestBody.email,
           password = requestBody.password;
     if(email=='1012305328@qq.com'&&password=='123456'){
+        var user = await User.create({
+            email: email,
+            password: password,
+            name: 'wangyafei',
+            gender:1
+        });
         //登录成功
         ctx.render('signin-ok.html',{
             title: 'Sign In Ok',
-            name: 'Mr Node'
+            name: user.name
         });
     }else {
         ctx.render('signin-failed.html',{
